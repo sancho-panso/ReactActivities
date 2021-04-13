@@ -6,19 +6,13 @@ import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
 
 interface IProps{
-    setEditMode:(editMode:boolean)=>void;
     selectedActivity: IActivity | null;
-    editActivity:(activity: IActivity) => void;
-    submitting: boolean;
 }
 
 const ActivityForm:React.FC<IProps> = ({
-    setEditMode, 
-    selectedActivity,
-    editActivity,
-    submitting}) => {
+    selectedActivity}) => {
     const activityStore = useContext(ActivityStore);
-    const {createActivity} = activityStore;
+    const {createActivity, editActivity, submitting, cancelFormOpen} = activityStore;
     const initializeForm = () => {
         if(selectedActivity){
             return selectedActivity;
@@ -65,10 +59,10 @@ const ActivityForm:React.FC<IProps> = ({
                 <Form.Input onChange={handleInputChange} name="city" placeholder="City" value={activity.city}/> 
                 <Form.Input onChange={handleInputChange} name="venue" placeholder="Venue" value={activity.venue}/>
                 <Button loading={submitting} floated="right" positive type="submit" content="Submit"/>
-                <Button onClick={()=>setEditMode(false)} floated="right" type="submit" content="Cancel"/>
+                <Button onClick={cancelFormOpen} floated="right" type="submit" content="Cancel"/>
             </Form>
         </Segment>
     )
 }
 
-export default ActivityForm
+export default observer(ActivityForm);
