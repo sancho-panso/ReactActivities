@@ -23,6 +23,7 @@
     "useDefineForClassFields": true
   },
   "include": [
-    "src"
+    "src",
+    "./typing-custom/**/*.ts"
   ]
 }

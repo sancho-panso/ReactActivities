@@ -8,15 +8,19 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-css/semantic.min.css';
+import "react-widgets/styles.css";
+
+
+
 
 export const history = createBrowserHistory();
 
 ReactDOM.render(
-  <Router history={history}>
-  <ScrollToTop>
-      <App />
-  </ScrollToTop>
-  </Router>,
+    <Router history={history}>
+    <ScrollToTop>
+        <App />
+    </ScrollToTop>
+    </Router>,
   document.getElementById('root')
 );
 

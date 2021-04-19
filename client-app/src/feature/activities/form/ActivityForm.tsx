@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Segment,Form, Button, Grid} from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
-import { IActivity } from '../../../app/models/activity';
+import {IActivityFormValues } from '../../../app/models/activity';
 import {v4 as uuid} from 'uuid';
 import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
@@ -10,6 +10,8 @@ import TextInput from '../../../app/common/form/TextInput';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import {category} from '../../../app/common/options/categoryOptions';
 import SelectInput from '../../../app/common/form/SelectInput';
+import DateInput from '../../../app/common/form/DateInput';
+import TimeInput from '../../../app/common/form/TimeInput';
 
 interface DetailsParams {
     id: string;
@@ -19,24 +21,26 @@ const ActivityForm:React.FC<RouteComponentProps<DetailsParams>> = ({match, histo
     const activityStore = useContext(ActivityStore);
     const {createActivity, editActivity, submitting, activity: initialFormState, loadActivity, clearActivity} = activityStore;
 
-    const [activity, setActivity] = useState<IActivity>({
-        id:"",
+    const [dateNow]=useState(new Date());
+    const [activity, setActivity] = useState<IActivityFormValues>({
+        id:undefined,
         title: "",
         category: "",
         description: "",
-        date: "",
+        date: undefined,
+        time: undefined,
         city: "",
         venue: "",
     });
 
     useEffect(() => {
-        if(match.params.id && activity.id.length === 0){
+        if(match.params.id && activity.id){
             loadActivity(match.params.id).then(() => initialFormState && setActivity(initialFormState));
         }
         return () => {
             clearActivity();
         }
-    }, [loadActivity, clearActivity, match.params.id, initialFormState, activity.id.length])
+    }, [loadActivity, clearActivity, match.params.id, initialFormState, activity.id])
 
     // const handleSubmit = () => {
     //     if (activity.id.length === 0){
@@ -51,7 +55,7 @@ const ActivityForm:React.FC<RouteComponentProps<DetailsParams>> = ({match, histo
     // }
 
     const handleFinalFormSubmit = (values:any) => {
-        console.log(values);
+        console.log(values.date);
         
     }
 
@@ -66,7 +70,10 @@ const ActivityForm:React.FC<RouteComponentProps<DetailsParams>> = ({match, histo
                         <Field name="title" placeholder="Title" value={activity.title} component={TextInput}/>
                         <Field rows={3} name="description" placeholder="Description" value={activity.description} component={TextAreaInput}/>
                         <Field options={category} name="category" placeholder="Category" value={activity.category} component={SelectInput}/>
-                        <Field name="date" placeholder="Date" value={activity.date} component={TextInput}/>
+                        <Form.Group width='equal'>
+                            <Field  name="date" placeholder="Date" value={activity.date} component={DateInput}/>
+                            <Field  name="date" placeholder="Time" value={activity.date} component={TimeInput}/>
+                        </Form.Group>
                         <Field name="city" placeholder="City" value={activity.city} component={TextInput}/> 
                         <Field name="venue" placeholder="Venue" value={activity.venue} component={TextInput}/>
                         <Button loading={submitting} floated="right" positive type="submit" content="Submit"/>
