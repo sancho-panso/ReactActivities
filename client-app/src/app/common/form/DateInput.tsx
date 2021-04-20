@@ -8,8 +8,6 @@ interface IProps extends FieldRenderProps<Date>, FormFieldProps{}
 const DateInput:React.FC<IProps> = ({
     input,
     width,
-    time=false,
-    date=false,
     placeholder,
     meta:{ touched, error},
     id,
@@ -21,6 +19,7 @@ const DateInput:React.FC<IProps> = ({
                 placeholder={placeholder}
                 value={input.value || null}
                 onChange={input.onChange}
+                onBlur={input.onBlur}
                 {...rest}
             />
             {touched && error && (<Label basic color='red'>{error}</Label>)}

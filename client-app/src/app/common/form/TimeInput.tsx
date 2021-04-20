@@ -21,6 +21,7 @@ const DateInput:React.FC<IProps> = ({
                 placeholder={placeholder}
                 value={input.value || null}
                 onChange={input.onChange}
+                onBlur={input.onBlur}
                 {...rest}
             />
             {touched && error && (<Label basic color='red'>{error}</Label>)}
