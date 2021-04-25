@@ -3,7 +3,6 @@ import {Segment,Form, Button, Grid} from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
 import {ActivityFormValue} from '../../../app/models/activity';
 import {v4 as uuid} from 'uuid';
-import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
 import {Form as FinalForm, Field} from 'react-final-form'
 import TextInput from '../../../app/common/form/TextInput';
@@ -12,7 +11,8 @@ import {category} from '../../../app/common/options/categoryOptions';
 import SelectInput from '../../../app/common/form/SelectInput';
 import DateInput from '../../../app/common/form/DateInput';
 import TimeInput from '../../../app/common/form/TimeInput';
-import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired, matchesPattern} from 'revalidate';
+import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const validate = combineValidators({
     title: isRequired({message:'The event title is required'}),
@@ -35,8 +35,8 @@ interface DetailsParams {
 }
 
 const ActivityForm:React.FC<RouteComponentProps<DetailsParams>> = ({match, history}) => {
-    const activityStore = useContext(ActivityStore);
-    const {createActivity, editActivity, submitting,loadActivity} = activityStore;
+    const rootStore = useContext(RootStoreContext);
+    const {createActivity, editActivity, submitting,loadActivity} = rootStore.activityStore;
 
     const [activity, setActivity] = useState(new ActivityFormValue());
     const [loading, setLoading] = useState(false);

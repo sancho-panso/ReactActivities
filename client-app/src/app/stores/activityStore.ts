@@ -1,16 +1,19 @@
-import {observable, action, computed, makeAutoObservable, configure, runInAction} from 'mobx';
-import { createContext } from 'react';
+import {observable, action, computed, makeAutoObservable, runInAction} from 'mobx';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import {IActivity} from '../models/activity';
+import {RootStore} from './rootStore';
 
-configure({enforceActions: 'always'});
 
-class ActivityStore {
-  constructor() {
+export default class ActivityStore {
+
+  rootStore: RootStore;
+  constructor(rootStore:RootStore) {
+    this.rootStore = rootStore
     makeAutoObservable(this);
   }
+
   @observable activityRegistry = new Map(); 
   @observable activity:IActivity | null = null;
   @observable loadingInitial = false;
@@ -140,4 +143,3 @@ class ActivityStore {
   }
 }
 
-export default createContext(new ActivityStore())
