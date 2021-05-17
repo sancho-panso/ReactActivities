@@ -4,12 +4,12 @@ import ActivityDashboard from '../../feature/activities/dashboard/ActivityDashbo
 import NavBar from '../../feature/nav/NavBar';
 import {observer} from 'mobx-react-lite';
 import { Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
-import HomePage from '../../feature/home/HomePage'
+import HomePage from '../../feature/home/HomePage';
+import ProfilePage from '../../feature/profiles/ProfilePage';
 import ActivityForm from '../../feature/activities/form/ActivityForm';
 import ActivityDetails from '../../feature/activities/details/ActivityDetails';
 import {ToastContainer} from 'react-toastify';
 import NotFound from './NotFound';
-import LoginForm from '../../feature/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import LoadingComponent from './loadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
@@ -43,7 +43,7 @@ const App:React.FC<RouteComponentProps> = ({location}) => {
                 <Route exact path='/activities' component={ActivityDashboard}/>
                 <Route path='/activities/:id' component={ActivityDetails}/>
                 <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm}/>
-                <Route path='/login' component={LoginForm}/>
+                <Route path='/profile/:username' component={ProfilePage}/>
                 <Route component={NotFound}/>
               </Switch>
             </Container>

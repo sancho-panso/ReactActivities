@@ -6,7 +6,7 @@ import { IActivity } from '../../../app/models/activity';
 import {format} from 'date-fns';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
-const activityImageStyle = {
+const activityImageStyle = { 
   filter: 'brightness(30%)'
 };
 
@@ -22,6 +22,7 @@ const activityImageTextStyle = {
 const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const rootStore = useContext(RootStoreContext);
   const {attendActivity, cancelActivity, loading} = rootStore.activityStore;
+  const host = activity.attendees.filter( x => x.isHost)[0];
     return (
            <Segment.Group>
              <Segment basic attached='top' style={{ padding: '0' }}>
@@ -37,9 +38,9 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                        />
                        <p>{format(activity.date!, 'eeee do MMMM')}</p>
                        <p>
-                         Hosted by <strong>Bob</strong>
+                         Hosted by <Link to={`/profile/${host.username}`}><strong>{host.displayName}</strong></Link>
                        </p>
-                     </Item.Content>
+                     </Item.Content> 
                    </Item>
                  </Item.Group>
                </Segment>
