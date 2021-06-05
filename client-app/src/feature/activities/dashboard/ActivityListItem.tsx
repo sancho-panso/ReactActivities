@@ -17,7 +17,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                             <Item.Content>
                                 <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
                                 <Item.Description>
-                                    Hosted by {host.displayName}
+                                    Hosted by
                                     <Link to={`/profile/${host.username}`}> {host.displayName}</Link>
                                 </Item.Description>
                                 {activity.isHost &&

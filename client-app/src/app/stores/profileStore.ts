@@ -46,6 +46,25 @@ export default class ProfileStore {
         }
     }
 
+    @action updateProfile = async (profile:IProfile) => {
+        try {
+           await agent.Profiles.put(profile);
+           runInAction(() =>{
+                if(this.profile!.displayName !== this.rootStore.userStore.user!.displayName){
+                    this.rootStore.userStore.user!.displayName = profile.displayName!;
+                }
+                this.profile ={...this.profile!, ...profile};
+           })
+        } catch (error) {
+            toast.error('Problem updating profile')
+           
+        }
+    }
+
+    
+
+
+
     @action upLoadPhoto = async (file: Blob)=>{
         this.uploadingPhoto =  true;
         try {
