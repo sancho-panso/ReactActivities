@@ -5,3 +5,5 @@ obj
 appsettings.json
 *.db
 node_modules
+wwwroot
+publish

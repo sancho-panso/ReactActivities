@@ -2,13 +2,16 @@ import { IActivity, IAttendee } from "../app/models/activity";
 import { IUser } from "../app/models/user";
 
 export const combineDateAndTime = (date: Date)=>{
-    const timeString = date.getHours()+':'+date.getMinutes()+':00';
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const dateString = `${year}-${month}-${day}`;
+    // const timeString = date.getHours()+':'+date.getMinutes()+':00';
+    // const year = date.getFullYear();
+    // const month = date.getMonth() + 1;
+    // const day = date.getDate();
+    // const dateString = `${year}-${month}-${day}`;
 
-    return new Date(dateString + ' ' + timeString);
+    const dateString = date.toISOString().split('T')[0];
+    const timeString = date.toISOString().split('T')[1];
+
+    return new Date(dateString + 'T' + timeString);
 }
 
 export const setActivityProps = (activity:IActivity, user: IUser) => {

@@ -7,7 +7,7 @@ import {IPhoto, IProfile} from '../models/profile'
 
 
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use((config) => {
     const token = window.localStorage.getItem('jwt');
@@ -18,12 +18,17 @@ axios.interceptors.request.use((config) => {
 })
 
 axios.interceptors.response.use(undefined, error => {
-    const {status, data, config} = error.response;
+    const {status, data, config, statusText} = error.response;
     if(error.message === 'Network Error' && !error.response){
         toast.error('network error, make sure API is running!')
     }
     if (status === 404){
         history.push('/notfound')
+    }
+    if(status === 401 && statusText === "Unauthorized"){
+        window.localStorage.removeItem('jwt');
+        history.push('/');
+        toast.info('Your session has expired, please login again');
     }
     if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')){
         history.push('/notfound')
@@ -36,16 +41,11 @@ axios.interceptors.response.use(undefined, error => {
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-const sleep = (ms: number) => (response: AxiosResponse) =>
-        new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
-
-
-
 const requests = {
-    get: (url: string) => axios.get(url).then(sleep(1000)).then(responseBody),
-    post: (url: string, body:{}) => axios.post(url, body).then(sleep(1000)).then(responseBody),
-    put: (url: string, body:{}) => axios.put(url, body).then(sleep(1000)).then(responseBody),
-    del: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody),
+    get: (url: string) => axios.get(url).then(responseBody),
+    post: (url: string, body:{}) => axios.post(url, body).then(responseBody),
+    put: (url: string, body:{}) => axios.put(url, body).then(responseBody),
+    del: (url: string) => axios.delete(url).then(responseBody),
     postForm: (url:string, file: Blob) => {
         let formData = new FormData();
         formData.append('File',file);
@@ -57,7 +57,7 @@ const requests = {
 
 const Activities = {
     list:(params: URLSearchParams): Promise<IActivitiesEnvelope> => 
-    axios.get('/activities', {params:params}).then(sleep(1000)).then(responseBody),
+    axios.get('/activities', {params:params}).then(responseBody),
     details:(id:string) => requests.get(`/activities/${id}`),
     create:(activity:IActivity) => requests.post('/activities/', activity),
     update:(activity:IActivity) => requests.put(`/activities/${activity.id}`, activity),
