@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
